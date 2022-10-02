@@ -1,4 +1,1 @@
-discord logs
 ilegal box (item)
-
-https://docs.esx-framework.org/legacy/Server/xplayer/addinventoryitem
