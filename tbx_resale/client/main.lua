@@ -56,54 +56,6 @@ Citizen.CreateThread(function()
     end
 end)
 
---- garage
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        local sleep = true
-        for k,v in pairs(Config.Markers.Garage) do
-            local mk = v.marker
-            local distance = #(coords-v.pos)
-
-            if distance <= 10.0 and duty then
-                sleep = false
-
-                if distance >= 1.5 then
-                    DrawMarker(mk.type, v.pos.x, v.pos.y, v.pos.z, 0, 0, 0, 0, 0, 0, mk.size.x, mk.size.y, mk.size.z, mk.color.r, mk.color.g, mk.color.b, mk.color.a, mk.jump, mk.face, 0, mk.rotate)
-                end
-
-                if distance <= 1.5 then
-                    if onFoot then
-                        Draw3DText(v.pos.x, v.pos.y, v.pos.z, v.text, 0.65)
-                    else
-                        Draw3DText(v.pos.x, v.pos.y, v.pos.z, v.text2, 0.65)
-                    end
-                end
-
-                if IsControlJustReleased(0, 38) and onFoot then
-                    ESX.Game.SpawnVehicle(Config.VehName, vector3(v.pos.x, v.pos.y, v.pos.z), v.heading, function(vehicle)
-                        TaskWarpPedIntoVehicle(playerPed, vehicle, -1)
-                        notification('Prekupnik drog', 'zacatek', 'Paráda! pro vyhledání zakazky zmackni sval [K]')
-                        local source = GetPlayerServerId(PlayerId())
-                        local text = "Hrac vybral vozidlo"
-                        TriggerServerEvent("tbx_resale:sendLogToServer", source, text)
-                    end)
-                elseif IsControlJustReleased(0, 38) and not onFoot then
-                    local veh = GetVehiclePedIsIn(playerPed, false)
-                    DeleteEntity(veh)
-                    Notif("Vozidlo bylo schováno do garáže")
-                    local source = GetPlayerServerId(PlayerId())
-                    local text = "Hrac ulozil vozidlo"
-                    TriggerServerEvent("tbx_resale:sendLogToServer", source, text)
-                end
-            end
-
-            if sleep then
-                Citizen.Wait(1000)
-            end
-        end
-    end
-end)
 
 
 -- Get Task
@@ -261,12 +213,19 @@ end)
             Citizen.Wait(3000)
             ClearPedTasks(playerPed)
             duty = true
-            notification('Prekupnik drog', 'zacatek', 'uprostred mistnosti si vezmi vozidlo!')
+            notification('Prekupnik drog', 'zacatek', 'Pred garazi mas nachystane auto, po nasednuti zmackni sval [K] dealerům das tak vedet ze jsi pripraven!')
             local source = GetPlayerServerId(PlayerId())
             local text = "Hrac zacal pracovat"
             TriggerServerEvent("tbx_resale:sendLogToServer", source, text)
+            ESX.Game.SpawnVehicle('blista', vector3(-1138.52, -1992.96, 13.16), 311.96, function(vehicle)
+                print(DoesEntityExist(vehicle), 'this code is async!')
+            end)
+
+            print('this code is sync!')
         end
     end
+
+
 
 function notification(title, subject, msg)
     local mugshot, mugshotStr = ESX.Game.GetPedMugshot(PlayerPedId())
