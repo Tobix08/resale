@@ -43,7 +43,7 @@ Config.Markers = {
     Garage = {
         [1] = {
             pos = vector3(-1158.24, -2009.2, 13.2),
-            heading = 195.4935,
+            heading = 329.68,
             marker = { type = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 0, b = 0, a = 100 }, jump = true, face = false, rotate = true },
             text = "Vzít vozidlo",
             text2 = "Uložit vozidlo"
